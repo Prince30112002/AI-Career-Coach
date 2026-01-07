@@ -1,44 +1,40 @@
-# src/ats_scoring.py
+from src.skill_extractor import extract_skills
 
-from skill_extractor import extract_skills
+REQUIRED_SKILLS = [
+    "Python",
+    "SQL",
+    "Machine Learning",
+    "NLP",
+    "Statistics",
+    "Cloud"
+]
 
-def calculate_ats_score(resume_text, job_description):
-    resume_skills = set(extract_skills(resume_text))
-    jd_skills = set(extract_skills(job_description))
+def calculate_ats_score(resume_text: str):
+    extracted_skills = extract_skills(resume_text)
 
-    matched_skills = resume_skills.intersection(jd_skills)
-    missing_skills = jd_skills.difference(resume_skills)
+    matched = [s for s in REQUIRED_SKILLS if s in extracted_skills]
+    missing = [s for s in REQUIRED_SKILLS if s not in extracted_skills]
 
-    score = round((len(matched_skills) / len(jd_skills)) * 100, 2) if jd_skills else 0
+    score = (len(matched) / len(REQUIRED_SKILLS)) * 100
 
-    return {
-        "ATS Score (%)": score,
-        "Matched Skills": list(matched_skills),
-        "Missing Skills": list(missing_skills)
-    }
+    return score, matched, missing
 
 
-# ---------------- TEST RUN ----------------
+# 🔍 Test run
 if __name__ == "__main__":
-    resume_text = """
-    I have experience in Python, Machine Learning, Deep Learning,
-    NLP, SQL, TensorFlow and Power BI.
+    sample_resume = """
+    Data Analyst with experience in Python, SQL, NLP and Machine Learning.
     """
 
-    job_description = """
-    Looking for a Data Scientist with skills in Python, Machine Learning,
-    SQL, Statistics, NLP and Cloud.
-    """
-
-    result = calculate_ats_score(resume_text, job_description)
+    score, matched, missing = calculate_ats_score(sample_resume)
 
     print("\n📊 ATS Resume Score")
-    print(f"Score: {result['ATS Score (%)']}%")
+    print(f"Score: {score:.2f}%")
 
     print("\n✅ Matched Skills:")
-    for skill in result["Matched Skills"]:
-        print("-", skill)
+    for s in matched:
+        print("-", s)
 
     print("\n❌ Missing Skills:")
-    for skill in result["Missing Skills"]:
-        print("-", skill)
+    for s in missing:
+        print("-", s)
