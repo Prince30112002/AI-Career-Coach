@@ -1,40 +1,34 @@
 from src.skill_extractor import extract_skills
 
-REQUIRED_SKILLS = [
-    "Python",
-    "SQL",
-    "Machine Learning",
-    "NLP",
-    "Statistics",
-    "Cloud"
+JOB_REQUIRED_SKILLS = [
+    "Python", "Sql", "Machine Learning",
+    "Statistics", "Cloud", "Nlp"
 ]
 
-def calculate_ats_score(resume_text: str):
-    extracted_skills = extract_skills(resume_text)
+def calculate_ats_score(resume_text):
+    resume_skills = extract_skills(resume_text)
 
-    matched = [s for s in REQUIRED_SKILLS if s in extracted_skills]
-    missing = [s for s in REQUIRED_SKILLS if s not in extracted_skills]
+    matched = list(set(resume_skills) & set(JOB_REQUIRED_SKILLS))
+    missing = list(set(JOB_REQUIRED_SKILLS) - set(resume_skills))
 
-    score = (len(matched) / len(REQUIRED_SKILLS)) * 100
+    score = (len(matched) / len(JOB_REQUIRED_SKILLS)) * 100
 
     return score, matched, missing
 
 
-# 🔍 Test run
 if __name__ == "__main__":
-    sample_resume = """
-    Data Analyst with experience in Python, SQL, NLP and Machine Learning.
+    sample_text = """
+    Skilled in Python, SQL, Machine Learning and NLP.
     """
+    score, matched, missing = calculate_ats_score(sample_text)
 
-    score, matched, missing = calculate_ats_score(sample_resume)
-
-    print("\n📊 ATS Resume Score")
+    print("📊 ATS Resume Score")
     print(f"Score: {score:.2f}%")
 
     print("\n✅ Matched Skills:")
-    for s in matched:
-        print("-", s)
+    for m in matched:
+        print("-", m)
 
     print("\n❌ Missing Skills:")
-    for s in missing:
-        print("-", s)
+    for m in missing:
+        print("-", m)
