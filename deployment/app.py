@@ -12,7 +12,7 @@ from src.ml.ats_similarity import ats_similarity
 
 st.set_page_config(page_title="AI Career Coach", layout="wide")
 
-st.title("🤖 AI Career Coach")
+st.title("🤖 AI Career Coach") 
 st.write("Upload your resume and get career insights")
 
 resume_path = "data/raw/sample resume.pdf"
@@ -46,4 +46,7 @@ if st.button("Analyze Resume"):
             st.write(f"Similarity: **{sim:.2f}%**")
 
     except Exception as e:
-        st.error(str(e))
+        st.error(str(e))    
+
+
+        
